@@ -1,16 +1,15 @@
+import { ApolloDriver } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { CatsController } from './cats/cats.controller';
-import { CatsModule } from './cats/cats.module';
-import { CatsService } from './cats/cats.service';
-import { PostService } from './post.service';
-import { PrismaService } from './prisma.service';
-import { UserService } from './user.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { PostModule } from './posts/posts.module';
 
 @Module({
-  imports: [CatsModule],
-  controllers: [AppController, CatsController],
-  providers: [AppService, CatsService, PostService, UserService, PrismaService],
+  imports: [
+    PostModule,
+    GraphQLModule.forRoot({
+      driver: ApolloDriver, // <--- "driver" should be here, as shown in the docs
+      typePaths: ['./**/*.graphql'],
+    }),
+  ],
 })
 export class AppModule {}
